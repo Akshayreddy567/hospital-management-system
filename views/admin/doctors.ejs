@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Doctors List</title>
+</head>
+<body>
+    <%- doctors %>
+    <ul>
+        <% for (let i=0; i < doctors.length; i++) {%>
+            <li>
+                Name: <%= doctors[i].name %>
+                <br>
+                <% if(!doctors[i].isAvailable) { %>
+                    <form action="/admin/checkin/<%= doctors[i]._id %>" method="post">
+                    <input type="submit" value="Check in">
+                    </form>
+                <% } else { %>
+                    <form action="/admin/checkout/<%= doctors[i]._id %>" method="post">
+                    Time: <%= doctors[i].timing %>
+                    <br>
+                    <input type="submit" value="Check out">
+                    </form>
+                <% } %>
+                <!-- Is the doctor available: <%= doctors[i].isAvailble %> -->
+            </li>
+            <br>
+        <% } %>
+    </ul>
+</body>
+</html>
