@@ -9,40 +9,11 @@ app.use(bodyParser.json());
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname + "/public"));
 
-// Routes
-app.get('/admin', async function (req, res) {
-    var doctors = await db.Doctor.find().exec();
-    res.render('admin/doctors', {
-        doctors: doctors
-    });
-});
+// Import all routes
+const adminRoutes = require('./routes/admin');
 
-app.post('/admin/checkin/:doctorID', async function (req, res) {
-    var doctors = await db.Doctor.findOneAndUpdate(
-        { _id: req.params.doctorID },
-        {
-            $set: {
-                timing: new Date(),
-                isAvailable: true
-            }
-        }
-    );
-    res.redirect('/admin')
-});
-
-app.post('/admin/checkout/:doctorID', async function (req, res) {
-    var doctors = await db.Doctor.findOneAndUpdate(
-        { _id: req.params.doctorID },
-        {
-            $set: {
-                timing: new Date(),
-                isAvailable: false
-            }
-        }
-    );
-    res.redirect('/admin');
-});
-
+// Assign the above routes to route paths
+app.use('/admin', adminRoutes);
 
 
 app.listen(3000);
