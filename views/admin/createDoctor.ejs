@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Doctors List</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">    
+    <title>Document</title>
 </head>
 <body>
     <header>
@@ -38,29 +38,21 @@
         </div>
         <div style="clear:both;"></div>
     </header>
-    <!-- <%- doctors %> -->
-    <div class="container">
-        <ul>
-            <% for (let i=0; i < doctors.length; i++) {%>
-                <li>
-                    Name: <%= doctors[i].name %>
-                    <br>
-                    <% if(!doctors[i].isAvailable) { %>
-                        <form action="/admin/checkin/<%= doctors[i]._id %>" method="post">
-                        <input type="submit" value="Check in" class="btn btn-danger">
-                        </form>
-                    <% } else { %>
-                        <form action="/admin/checkout/<%= doctors[i]._id %>" method="post">
-                        Time: <%= doctors[i].timing.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) %>
-                        <br>
-                        <input type="submit" value="Check out" class="btn btn-primary">
-                        </form>
-                    <% } %>
-                    <!-- Is the doctor available: <%= doctors[i].isAvailble %> -->
-                </li>
-                <br>
-            <% } %>
-        </ul>
+
+    <div class="col-6">
+        <form action="/admin/<%= user.username %>/createDoctor" method="post">
+            <h4>Onboard New Doctor</h4>
+            <input class="form-control" type="text" name="username" placeholder="username (required)" required>
+            <input class="form-control" type="text" name="name" placeholder="Full name" required>
+            <input class="form-control" type="email" name="email" placeholder="@example.com">
+            <input class="form-control" type="text" name="designation" placeholder="Designation" required>
+    
+            <input class="form-control" type="password" name="password" placeholder="password" required>
+            <input class="form-control" type="password" name="passwordConfirmation" placeholder="re-enter password" required>
+            <br>
+            <button type="submit" class="btn btn-primary">Onboard</button>
+        </form>
     </div>
+
 </body>
 </html>
