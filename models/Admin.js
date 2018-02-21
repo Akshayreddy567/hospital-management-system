@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 
 var adminSchema = new mongoose.Schema({
     username: {
@@ -19,6 +20,18 @@ var adminSchema = new mongoose.Schema({
 });
 
 // new Date().toLocaleTimeString();
+
+//hash the password before saving it to the database
+adminSchema.pre('save', function (next) {
+    var admin = this;
+    bcrypt.hash(admin.password, 10, function (err, hash) {
+        if (err) {
+            return next(err);
+        }
+        admin.password = hash;
+        next();
+    })
+});
 
 var Admin = mongoose.model('Admin', adminSchema);
 

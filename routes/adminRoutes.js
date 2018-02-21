@@ -14,7 +14,7 @@ mongoose.connect(connectURL);
 router.use(bodyParser.urlencoded({ extended: true }));
 
 // Authentication Helper Function
-function requireLoginAndUserRole(req, res, next) {
+function requireLoginAndAdminRole(req, res, next) {
     if (!req.user) {
         res.redirect('/admin');
     } else if (req.session.user && req.session.user.role === 'admin') {
@@ -53,7 +53,7 @@ router.post('/login', async function (req, res) {
             // so it's not available in the sessions cookie
             admin.password = null;
             // Store the user in the session:
-            req.session.user = user;
+            req.session.user = admin;
             res.redirect('/admin/' + admin.username);
         } else {
             // If the password doesn't match, display the login page again
@@ -86,7 +86,7 @@ router.post('/logout', async function (req, res) {
 
 
 // Logged in admin's dashboard
-router.get('/:username', async function (req, res) {
+router.get('/:username', requireLoginAndAdminRole, async function (req, res) {
     var doctors = await db.Doctor.find().exec();
     res.render('admin/doctors', {
         doctors: doctors
@@ -95,7 +95,7 @@ router.get('/:username', async function (req, res) {
 
 // Routes for checkig in doctors
 // A check-in is when a doctor enters the hospital
-router.post('/checkin/:doctorID', async function (req, res) {
+router.post('/checkin/:doctorID', requireLoginAndAdminRole, async function (req, res) {
     var doctors = await db.Doctor.findOneAndUpdate(
         { _id: req.params.doctorID },
         {
@@ -110,7 +110,7 @@ router.post('/checkin/:doctorID', async function (req, res) {
 
 // Routes for checkig out doctors
 // A check-out is when a doctor leaves/exits the hospital
-router.post('/checkout/:doctorID', async function (req, res) {
+router.post('/checkout/:doctorID', requireLoginAndAdminRole, async function (req, res) {
     var doctors = await db.Doctor.findOneAndUpdate(
         { _id: req.params.doctorID },
         {
