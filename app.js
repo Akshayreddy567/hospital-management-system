@@ -15,6 +15,8 @@ app.set('json spaces', 2)
 // Import all routes
 const adminRoutes = require('./routes/adminRoutes');
 const userRoutes = require('./routes/userRoutes');
+// USER * SIGN  UP * and * LOGIN * MAGIC
+require('./routes/loginRoutes')(app)
 
 // Assign the above routes to route paths
 app.use('/admin', adminRoutes);
@@ -32,6 +34,10 @@ app.get('/test', async function (req, res) {
         .exec();
         // console.log(availableDoctors);
         res.json(availableDoctors)
+})
+
+app.get('/' , function(req ,res){
+    res.render("home.ejs");
 })
 
 app.listen(3000);
