@@ -38,6 +38,14 @@ app.get('/test', async function (req, res) {
 
 app.get('/' , function(req ,res){
     res.render("home.ejs");
+
+})
+app.get('/testDoctor', function(req ,res){
+    res.render("homeDoctor.ejs");
+})
+
+app.get('/testAdmin', function(req,res){
+    res.render("homeAdmin.ejs");
 })
 
 app.listen(3000);
