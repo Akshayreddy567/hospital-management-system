@@ -41,8 +41,14 @@ module.exports = function (app) {
             if (req.session.user.role === 'user') {
                 // Lookup the user in the DB by pulling their username from the session
                 var user = await db.User.findOne({ username: req.session.user.username });
+
             } else if (req.session.user.role === 'doctor') {
+
                 var user = await db.Doctor.findOne({ username: req.session.user.username });
+
+            } else if (req.session.user.role === 'admin') {
+
+                var user = await db.Admin.findOne({ username: req.session.user.username });
             }
 
             console.log("user object: ");
