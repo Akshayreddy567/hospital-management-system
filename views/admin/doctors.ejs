@@ -5,29 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Doctors List</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 </head>
 <body>
     <!-- <%- doctors %> -->
-    <ul>
-        <% for (let i=0; i < doctors.length; i++) {%>
-            <li>
-                Name: <%= doctors[i].name %>
-                <br>
-                <% if(!doctors[i].isAvailable) { %>
-                    <form action="/admin/checkin/<%= doctors[i]._id %>" method="post">
-                    <input type="submit" value="Check in">
-                    </form>
-                <% } else { %>
-                    <form action="/admin/checkout/<%= doctors[i]._id %>" method="post">
-                    Time: <%= doctors[i].timing %>
+    <div class="container">
+        <ul>
+            <% for (let i=0; i < doctors.length; i++) {%>
+                <li>
+                    Name: <%= doctors[i].name %>
                     <br>
-                    <input type="submit" value="Check out">
-                    </form>
-                <% } %>
-                <!-- Is the doctor available: <%= doctors[i].isAvailble %> -->
-            </li>
-            <br>
-        <% } %>
-    </ul>
+                    <% if(!doctors[i].isAvailable) { %>
+                        <form action="/admin/checkin/<%= doctors[i]._id %>" method="post">
+                        <input type="submit" value="Check in" class="btn btn-danger">
+                        </form>
+                    <% } else { %>
+                        <form action="/admin/checkout/<%= doctors[i]._id %>" method="post">
+                        Time: <%= doctors[i].timing.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) %>
+                        <br>
+                        <input type="submit" value="Check out" class="btn btn-primary">
+                        </form>
+                    <% } %>
+                    <!-- Is the doctor available: <%= doctors[i].isAvailble %> -->
+                </li>
+                <br>
+            <% } %>
+        </ul>
+    </div>
 </body>
 </html>

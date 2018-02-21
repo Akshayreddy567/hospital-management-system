@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Doctors List</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+    
+    <div class="container">
+        <%- doctors %>
+        <br>
+        <h4>Available doctors:</h4>
+        <ul class="list-group col-md-5">
+            <% for (let i=0; i < doctors.length; i++) {%>
+                <li class="list-group-item">
+                    <%= doctors[i].name %> 
+                    <span class="badge badge-primary badge-pill"><%= doctors[i].designation %></span>
+                    <br>
+                    <span class="pull-right" style="float:right;">
+                        <form action="/users/ben/book/<%= doctors[i]._id %>" method="post">
+                            <input type="submit" value="Make an appointment" class="btn-sm btn-secondary">
+                        </form>
+                    </span>
+                    <br>
+                </li>
+                <br>
+            <% } %>
+        </ul>
+
+        <h4>Your appointments:</h4>
+        <!-- <%- userAppointments %>
+        <br>
+        <br> -->
+        <%= userAppointments[0].appointments %>
+        <br>
+        <ul class="list-group col-md-5">
+            <% for (let i=0; i < userAppointments[0].appointments.length; i++) {%>
+                <li class="list-group-item">
+                    <%= userAppointments[0].appointments[i].name %> 
+                    <span class="badge badge-primary badge-pill"><%= userAppointments[0].appointments[i].designation %></span>
+                    <br>
+                    <span class="pull-right" style="float:right;">
+                        <form action="/users/ben/cancel/<%= userAppointments[0].appointments[i]._id %>" method="post">
+                            <input type="submit" value="Cancel appointment" class="btn-sm btn-danger">
+                        </form>
+                    </span>
+                    <br>
+                </li>
+                <br>
+            <% } %>
+        </ul>
+                
+
+    </div>
+</body>
+</html>

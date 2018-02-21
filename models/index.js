@@ -8,3 +8,5 @@ mongoose.Promise = Promise;
 
 // Combine all the models
 module.exports.Doctor = require('./Doctors');
+module.exports.User = require('./Users');
+module.exports.Admin = require('./Admin');
