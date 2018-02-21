@@ -123,4 +123,44 @@ router.post('/checkout/:doctorID', requireLoginAndAdminRole, async function (req
     res.redirect('/admin');
 });
 
+router.get('/:username/createDoctor', requireLoginAndAdminRole, function (req, res) {
+    res.render('admin/createDoctor');
+});
+
+router.post('/:username/createDoctor', requireLoginAndAdminRole, function (req, res) {
+    if (req.body.password !== req.body.passwordConfirmation) {
+        error = "The passwords don't match. Please try again.";
+        res.render("admin/createDoctor", { error });
+
+    } else if (req.body.username && req.body.password) {
+        var newDoctorObject = {
+            username: req.body.username,
+            name: req.body.name,
+            designation: req.body.designation,
+            email: req.body.email,
+            password: req.body.password,
+            passwordConfirmation: req.body.passwordConfirmation
+        };
+
+        db.Doctor.create(newDoctorObject)
+            .then(function () {
+                // Redirect the admin to their homepage upon
+                // successful onboarding of the doctor
+                res.redirect("/admin/" + req.user.username);
+            }, function (err) {
+                // In case of any validation errors present
+                // the sign up form again with relevant errors
+                error = err;
+                res.render("admin/createDoctor", { error });
+            });
+    } else {
+        // When the user attempts to submit the form with empty
+        // values, present the sign up form again with a relevant
+        // error message
+        error = 'Please enter a username and password';
+        res.render("admin/createDoctor", { error });
+    }
+
+});
+
 module.exports = router;
