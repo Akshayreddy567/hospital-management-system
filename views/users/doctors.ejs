@@ -20,7 +20,7 @@
                     <span class="badge badge-primary badge-pill"><%= doctors[i].designation %></span>
                     <br>
                     <span class="pull-right" style="float:right;">
-                        <form action="/users/ben/book/<%= doctors[i]._id %>" method="post">
+                        <form action="/users/<%= patientName %>/book/<%= doctors[i]._id %>" method="post">
                             <input type="submit" value="Make an appointment" class="btn-sm btn-secondary">
                         </form>
                     </span>
@@ -31,29 +31,29 @@
         </ul>
 
         <h4>Your appointments:</h4>
-        <!-- <%- userAppointments %>
-        <br>
-        <br> -->
-        <%= userAppointments[0].appointments %>
-        <br>
-        <ul class="list-group col-md-5">
-            <% for (let i=0; i < userAppointments[0].appointments.length; i++) {%>
-                <li class="list-group-item">
-                    <%= userAppointments[0].appointments[i].name %> 
-                    <span class="badge badge-primary badge-pill"><%= userAppointments[0].appointments[i].designation %></span>
+        <% if(userAppointments[0]) { %>
+            <%= userAppointments[0].appointments %>
+            <br>
+            <br>
+            <ul class="list-group col-md-5">
+                <% for (let i=0; i < userAppointments[0].appointments.length; i++) {%>
+                    <li class="list-group-item">
+                        <%= userAppointments[0].appointments[i].name %> 
+                        <span class="badge badge-primary badge-pill"><%= userAppointments[0].appointments[i].designation %></span>
+                        <br>
+                        <span class="pull-right" style="float:right;">
+                            <form action="/users/<%= patientName %>/cancel/<%= userAppointments[0].appointments[i]._id %>" method="post">
+                                <input type="submit" value="Cancel appointment" class="btn-sm btn-danger">
+                            </form>
+                        </span>
+                        <br>
+                    </li>
                     <br>
-                    <span class="pull-right" style="float:right;">
-                        <form action="/users/ben/cancel/<%= userAppointments[0].appointments[i]._id %>" method="post">
-                            <input type="submit" value="Cancel appointment" class="btn-sm btn-danger">
-                        </form>
-                    </span>
-                    <br>
-                </li>
-                <br>
-            <% } %>
-        </ul>
-                
-
+                <% } %>
+            </ul>
+        <% } %>
+        <br>
+        
     </div>
 </body>
 </html>

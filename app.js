@@ -9,7 +9,8 @@ app.use(bodyParser.json());
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname + "/public"));
 
-// For tests
+// For testing, sending a formatted response to the browser
+app.set('json spaces', 2)
 
 // Import all routes
 const adminRoutes = require('./routes/admin');
@@ -19,13 +20,21 @@ app.use('/admin', adminRoutes);
 
 // Users or Patients
 app.get('/users/:username', async function (req, res) {
-    var availableDoctors = await db.Doctor.find({ isAvailable: true }).exec();
-    var userAppointments = await db.User.find({ username: req.params.username }, {appointments: 1})
+    res.locals.patientName = req.params.username
+    var availableDoctors = await db.Doctor
+        .find({
+            $and: [
+                { isAvailable: true },
+                { isBooked: false }
+            ]
+        })
+        .exec();
+    var userAppointments = await db.User.find({ username: req.params.username }, { appointments: 1 })
         .populate('appointments')
         .exec();
-    
-    // console.log("userAppointments: ");
-    // console.log(userAppointments[0].appointments);
+
+    console.log("userAppointments: ");
+    console.log(typeof userAppointments);
 
     res.render('users/doctors', {
         doctors: availableDoctors,
@@ -49,6 +58,7 @@ app.post('/users/:username/book/:doctorID', async function (req, res) {
         { _id: req.params.doctorID },
         {
             $addToSet: { appointments: patient._id },
+            isBooked: true
         }
     );
     console.log(doctor);
@@ -72,6 +82,7 @@ app.post('/users/:username/cancel/:doctorID', async function (req, res) {
         { _id: req.params.doctorID },
         {
             $pull: { appointments: patient._id },
+            isBooked: false
         }
     );
     console.log(doctor);
@@ -79,5 +90,17 @@ app.post('/users/:username/cancel/:doctorID', async function (req, res) {
     res.redirect('/users/' + req.params.username)
 });
 
+app.get('/test', async function (req, res) {
+    var availableDoctors = await db.Doctor
+        .find({
+            $and: [
+                { isAvailable: true },
+                { isBooked: false }
+            ]
+        })
+        .exec();
+        // console.log(availableDoctors);
+        res.json(availableDoctors)
+})
 
 app.listen(3000);
