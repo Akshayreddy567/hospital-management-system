@@ -64,6 +64,27 @@ router.post('/login', async function (req, res) {
     }
 });
 
+
+// admin Logout Route
+router.post('/logout', async function (req, res) {
+    // https://github.com/jdesboeufs/connect-mongo/issues/140#issuecomment-68108810
+    // Delete the session
+    // One of the following two lines of code should be working, 
+    // but they are not, and not terminating the user session
+    // req.session = null;
+    // req.session.destroy();
+
+    // So, I eplicitly delete the cookie from the user's browser
+    res.clearCookie('connect.sid');
+    // And remove the session stored in the 'sessions' collection
+    // so I don't pile up useless sessions
+    var sessionCollection = await mongoose.connection.db.collection("sessions");
+    await sessionCollection.findOneAndDelete({ _id: req.sessionID });
+    // Redirect the user to the homepage
+    res.redirect('/admin');
+});
+
+
 // Logged in admin's dashboard
 router.get('/:username', async function (req, res) {
     var doctors = await db.Doctor.find().exec();
@@ -72,6 +93,8 @@ router.get('/:username', async function (req, res) {
     });
 });
 
+// Routes for checkig in doctors
+// A check-in is when a doctor enters the hospital
 router.post('/checkin/:doctorID', async function (req, res) {
     var doctors = await db.Doctor.findOneAndUpdate(
         { _id: req.params.doctorID },
@@ -85,6 +108,8 @@ router.post('/checkin/:doctorID', async function (req, res) {
     res.redirect('/admin')
 });
 
+// Routes for checkig out doctors
+// A check-out is when a doctor leaves/exits the hospital
 router.post('/checkout/:doctorID', async function (req, res) {
     var doctors = await db.Doctor.findOneAndUpdate(
         { _id: req.params.doctorID },
