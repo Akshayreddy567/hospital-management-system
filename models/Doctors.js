@@ -18,6 +18,9 @@ var doctorSchema = new mongoose.Schema({
     designation: {
         type: String,
     },
+    email: {
+        type: String
+    },
     // Work on the time format
     timing: { 
         type: Date
