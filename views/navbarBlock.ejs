@@ -1,0 +1,19 @@
+<header>
+    <div id="header-bottom-right" style="float:right;">
+        <% if (typeof user == 'object' && user) { %>
+            <form class="form-inline" action="/users/logout" method="POST">
+                <strong>
+                <a href="/users/<%= user.username %>" style="font-size:1.1em;"><b><%= user.username %></b></a>&nbsp;
+                |&nbsp;<button type="submit" class="btn btn-danger"><b>logout</b></button>&nbsp;
+                </strong>
+            </form>
+            <!-- <%- user %> -->
+        <% } else { %>
+            <span class="user">Want to join?
+                <a href="/users" class="login-link" style="color:red;font-size:1.1em;"><b>Log In/Sign Up</b></a> in seconds.
+            </span>
+        <% } %>
+    </div>
+    <div style="clear:both;"></div>
+</header>
+
