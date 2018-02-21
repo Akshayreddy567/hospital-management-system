@@ -8,6 +8,24 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 </head>
 <body>
+    <header>
+        <div id="header-bottom-right" style="float:right;">
+            <% if (typeof user == 'object' && user) { %>
+                <form class="form-inline" action="/admin/logout" method="POST">
+                    <strong>
+                    <a href="/admin/<%= user.username %>" style="font-size:1.1em;"><b><%= user.username %></b></a>&nbsp;
+                    |&nbsp;<button type="submit" class="btn btn-danger"><b>logout</b></button>&nbsp;
+                    </strong>
+                </form>
+                <!-- <%- user %> -->
+            <% } else { %>
+                <span class="admin">Want to join?
+                    <a href="/admin" class="login-link" style="color:red;font-size:1.1em;"><b>Log In/Sign Up</b></a> in seconds.
+                </span>
+            <% } %>
+        </div>
+        <div style="clear:both;"></div>
+    </header>
     <!-- <%- doctors %> -->
     <div class="container">
         <ul>
