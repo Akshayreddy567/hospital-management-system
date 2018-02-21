@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Doctors login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">    
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-inverse">
+            <span class="navbar-brand">H|M|S</span>
+            <ul class="navbar-nav">
+                <% if (typeof user == 'object' && user) { %>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/doctors/<%= user.username %>/">Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/doctors/<%= user.username %>/editProfile">Edit Profile</a>
+                </li>
+                <% } %>
+            </ul>
+        </nav>
+        <div id="header-bottom-right" style="float:right;">
+            <% if (typeof user == 'object' && user) { %>
+                <form class="form-inline" action="/admin/logout" method="POST">
+                    <strong>
+                    <a href="/admin/<%= user.username %>" style="font-size:1.1em;"><b><%= user.username %></b></a>&nbsp;
+                    |&nbsp;<button type="submit" class="btn btn-danger"><b>logout</b></button>&nbsp;
+                    </strong>
+                </form>
+            <% } %>
+        </div>
+        <div style="clear:both;"></div>
+    </header>
+    
+    <div class="active-appointments col-6">
+        <h4>My Appointment(s) for the day:</h4>
+        <!-- <%- doctor.appointments.length %> -->
+        <% if(doctor.appointments.length) { %>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name of the patient</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Done</th>
+                    </tr>
+                </thead>
+                <% for(let i=0; i<doctor.appointments.length; i++) { %>
+                    <tbody>
+                        <tr>
+                            <th scope="row"><%- i+1 %></th>
+                            <td> <%= doctor.appointments[i].fullname %> </td>
+                            <td> <%= doctor.appointments[i].email %> </td>
+                            <td> 
+                                <form method="POST" action="/doctors/done/<%= doctor.appointments[i]._id %>" class="form-group form-inline">
+                                    <button type="submit" class="form-control btn btn-success">done</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                <% } %>
+            </table>
+        <% } else { %>
+            <p>You've no appointments for the day!</p>
+        <% } %>
+    </div>
+
+</body>
+</html>

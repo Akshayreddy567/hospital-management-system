@@ -1,10 +1,11 @@
 var express = require("express");
-var route = require("express");
+var router = express.Router();
 var db = require("../models");
 var bodyParser = require("body-parser");
 const bcrypt = require('bcrypt');
 
-
+// Sessions Storage | Not Optimal, because I am repeating a connection.
+// Will work on an optimal solution later
 var mongoose = require('mongoose');
 var connectURL = "mongodb://localhost:27017/hospitalmgmt";
 mongoose.connect(connectURL);
@@ -13,10 +14,10 @@ mongoose.connect(connectURL);
 router.use(bodyParser.urlencoded({ extended: true }));
 
 // Authentication Helper Function
-function requireLoginAndUserRole(req, res, next) {
+function requireLoginAndDoctorRole(req, res, next) {
     if (!req.user) {
-        res.redirect('/users');
-    } else if (req.session.user && req.session.user.role === 'user') {
+        res.redirect('/doctors');
+    } else if (req.session.user && req.session.user.role === 'doctor') {
         next();
     } else {
         res.send(403);
@@ -33,10 +34,39 @@ router.get('/', function (req, res) {
     }
 })
 
+router.get('/:username', requireLoginAndDoctorRole, async function (req, res) {
+    var doctor = await db.Doctor.findOne({ username: req.params.username })
+        .populate('appointments')
+        .exec();
+    // res.json(doctor);
+    res.render('doctors/dashboard', { doctor });
+});
+
+router.post('/done/:user_id', async function (req, res) {
+    // Update the Doctor model
+    var doctor = await db.Doctor.findOneAndUpdate(
+        { username: req.user.username },
+        {
+            $pull: { appointments: req.params.user_id },
+            isBooked: false
+        }
+    );
+
+    // Update the User model
+    var patient = await db.User.findOneAndUpdate(
+        { _id: req.params.user_id },
+        {
+            $pull: { appointments: doctor._id },
+        }
+    );
+    
+    res.redirect('/doctors/' + req.user.username);
+})
+
 router.post('/login', async function (req, res) {
     var error;
     // Load the user profile from the DB, with the username as key
-    var doctor = await db.User.findOne({ username: req.body.username });
+    var doctor = await db.Doctor.findOne({ username: req.body.username });
     // Check if the user exists
     if (!doctor) {
         // If the user doesn't exist, display the login page again
@@ -46,13 +76,13 @@ router.post('/login', async function (req, res) {
     } else {
         // Bcrypt checks if the user password matches with the 
         // hashed equivalent stored in the DB
-        if (bcrypt.compareSync(req.body.password, user.password)) {
+        if (bcrypt.compareSync(req.body.password, doctor.password)) {
             // set the password to null,
             // so it's not available in the sessions cookie
-            user.password = null;
+            doctor.password = null;
             // Store the user in the session:
-            req.session.user = user;
-            res.redirect('/doctors/' + user.username);
+            req.session.user = doctor;
+            res.redirect('/doctors/' + doctor.username);
         } else {
             // If the password doesn't match, display the login page again
             // with a relevant error message
@@ -80,3 +110,5 @@ router.post('/logout', async function (req, res) {
     // Redirect the user to the homepage
     res.redirect('/doctors');
 });
+
+module.exports = router
