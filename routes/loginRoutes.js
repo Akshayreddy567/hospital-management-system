@@ -9,7 +9,8 @@ var mongoose = require('mongoose');
 // Uncomment the following when running via mLAB
 // var connectURL = "mongodb://" + process.env.DB_USER + ":" + process.env.DB_PASS + "@ds237748.mlab.com:37748/ben-hackernews-clone";
 // Uncomment the following when running via localhost
-var connectURL = "mongodb://localhost:27017/hospitalmgmt";
+var connectURL = "mongodb://" + process.env.DB_USER + ":" + process.env.DB_PASS + "@ds245478.mlab.com:45478/hospitalmgmt";
+// var connectURL = "mongodb://localhost:27017/hospitalmgmt";
 mongoose.connect(connectURL);
 var dbSessions = mongoose.connection;
 dbSessions.once('open', function () {

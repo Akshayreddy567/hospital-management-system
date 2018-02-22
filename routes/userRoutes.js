@@ -7,7 +7,8 @@ const bcrypt = require('bcrypt');
 // Sessions Storage | Not Optimal, because I am repeating a connection.
 // Will work on an optimal solution later
 var mongoose = require('mongoose');
-var connectURL = "mongodb://localhost:27017/hospitalmgmt";
+var connectURL = "mongodb://" + process.env.DB_USER + ":" + process.env.DB_PASS + "@ds245478.mlab.com:45478/hospitalmgmt";
+// var connectURL = "mongodb://localhost:27017/hospitalmgmt";
 mongoose.connect(connectURL);
 
 // Middlewares

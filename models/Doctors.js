@@ -22,7 +22,6 @@ var doctorSchema = new mongoose.Schema({
     email: {
         type: String
     },
-    // Work on the time format
     timing: { 
         type: Date
     },
@@ -38,6 +37,69 @@ var doctorSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     }],
+    time_slot: {
+        _08AM_10AM: {
+            isBooked: {
+                type: Boolean,
+                default: false
+            },
+            user_id: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'User'
+            }
+        },
+        _10AM_12AM: {
+            isBooked: {
+                type: Boolean,
+                default: false
+            },
+            user_id: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'User'
+            }
+        },
+        _12AM_02PM: {
+            isBooked: {
+                type: Boolean,
+                default: false
+            },
+            user_id: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'User'
+            }
+        },
+        _02PM_04PM: {
+            isBooked: {
+                type: Boolean,
+                default: false
+            },
+            user_id: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'User'
+            }
+        },
+        _04PM_06PM: {
+            isBooked: {
+                type: Boolean,
+                default: false
+            },
+            user_id: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'User'
+            }
+        },
+        _06PM_08PM: {
+            isBooked: {
+                type: Boolean,
+                default: false
+            },
+            user_id: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'User'
+            }
+        }
+
+    },
     role: {
         type: String,
         default: 'doctor'
