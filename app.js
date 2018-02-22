@@ -3,6 +3,8 @@ const app = express();
 const db = require('./models')
 const bodyParser = require("body-parser");
 
+const port = Number(process.env.PORT || 3000);
+
 // Middlewares
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -52,4 +54,4 @@ app.get('/testAdmin', function(req,res){
     res.render("homeAdmin.ejs");
 })
 
-app.listen(3000);
+app.listen(port);
