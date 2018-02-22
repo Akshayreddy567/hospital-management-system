@@ -40,27 +40,45 @@
     </header>
     <!-- <%- doctors %> -->
     <div class="container">
-        <ul>
-            <% for (let i=0; i < doctors.length; i++) {%>
-                <li>
-                    Name: <%= doctors[i].name %>
-                    <br>
-                    <% if(!doctors[i].isAvailable) { %>
-                        <form action="/admin/checkin/<%= doctors[i]._id %>" method="post">
-                        <input type="submit" value="Check in" class="btn btn-danger">
-                        </form>
-                    <% } else { %>
-                        <form action="/admin/checkout/<%= doctors[i]._id %>" method="post">
-                        Time: <%= doctors[i].timing.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) %>
-                        <br>
-                        <input type="submit" value="Check out" class="btn btn-primary">
-                        </form>
+        <% if (doctors.length) { %>
+            <h4>Check-in/Check-out Doctors:</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Doctor</th>
+                        <th scope="col">Username</th>
+                        <th scope="col">Designation</th>
+                        <th scope="col">Check in Time</th>
+                        <th scope="col">Check in/ Check out</th>
+                    </tr>
+                    <% for (let i=0; i < doctors.length; i++) {%>
+                        <tbody>
+                            <tr>
+                                <th scope="row"><%- i+1 %></th>
+                                <td><%= doctors[i].name %></td>
+                                <td><%= doctors[i].username %></td>
+                                <td><%= doctors[i].designation %></td>
+                                <td><%= doctors[i].timing.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) %></td>
+                                <td>
+                                    <% if(!doctors[i].isAvailable) { %>
+                                        <form action="/admin/checkin/<%= doctors[i]._id %>" method="post">
+                                        <input type="submit" value="Check in" class="btn btn-danger">
+                                        </form>
+                                    <% } else { %>
+                                        <form action="/admin/checkout/<%= doctors[i]._id %>" method="post">
+                                        <input type="submit" value="Check out" class="btn btn-primary">
+                                        </form>
+                                    <% } %>
+                                </td>
+                            </tr>
+                        </tbody>
                     <% } %>
-                    <!-- Is the doctor available: <%= doctors[i].isAvailble %> -->
-                </li>
-                <br>
-            <% } %>
-        </ul>
+                </thead>
+            </table>
+        <% } else { %>
+            There are currently no doctors on board.
+        <% } %>
     </div>
 </body>
 </html>
