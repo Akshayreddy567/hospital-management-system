@@ -70,7 +70,11 @@
                                 <td>
                                     <button type="button" class="btn btn-sm btn-primary" disabled><%= userAppointments[0].appointments[i].designation %></button>                                
                                 </td>
-                                <td ><%= userAppointments[0].appointments[i].timing.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) %></td>
+                                <td >
+                                    <% if(userAppointments[0].appointments[i].timing) {%>
+                                        <%= userAppointments[0].appointments[i].timing.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) %>
+                                    <% } %>
+                                </td>
                                 <td >
                                     <form action="/users/<%= patientName %>/cancel/<%= userAppointments[0].appointments[i]._id %>" method="post">
                                         <input type="submit" value="Cancel appointment" class="btn btn-danger">

@@ -59,7 +59,11 @@
                                 <td><%= doctors[i].name %></td>
                                 <td><%= doctors[i].username %></td>
                                 <td><%= doctors[i].designation %></td>
-                                <td><%= doctors[i].timing.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) %></td>
+                                <td>
+                                    <% if(doctors[i].timing) { %>
+                                        <%= doctors[i].timing.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) %>
+                                    <% } %>
+                                </td>
                                 <td>
                                     <% if(!doctors[i].isAvailable) { %>
                                         <form action="/admin/checkin/<%= doctors[i]._id %>" method="post">

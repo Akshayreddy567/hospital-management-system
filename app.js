@@ -38,8 +38,10 @@ app.get('/test', async function (req, res) {
         res.json(availableDoctors)
 })
 
+// 
+
 app.get('/' , function(req ,res){
-    res.render("home.ejs");
+    res.redirect('/users');
 
 })
 app.get('/testDoctor', function(req ,res){
